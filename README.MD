@@ -6,16 +6,6 @@
 
 > A curated collection of n8n automation workflows, examples, and learning resources. Master workflow automation one node at a time.
 
-## 📋 Table of Contents
-- [About](#-about)
-- [Prerequisites](#-prerequisites)
-- [Getting Started](#-getting-started)
-- [Workflow Collection](#-workflow-collection)
-- [Learning Path](#-learning-path)
-- [Best Practices](#-best-practices)
-- [Resources](#-resources)
-- [Contributing](#-contributing)
-- [License](#-license)
 
 ## 🎯 About
 
