@@ -1,0 +1,135 @@
+{
+  "name": "Ai Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "discord-bot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        -16
+      ],
+      "id": "b9e9893e-7b0b-4e05-874d-eb4ae4e1c95c",
+      "name": "Webhook",
+      "webhookId": "5c2afeef-ac36-487b-ae5a-60b840dcb30e"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "llama3.2:latest",
+          "mode": "list",
+          "cachedResultName": "llama3.2:latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an experienced real estate mentor.\n\nUser asked:\n{{ $json.body.content }}\n\nGive:\n- Simple explanation (max 3 sentences)\n- Real example (1 sentence)\n- Actionable advice (1 sentence)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.ollama",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -16
+      ],
+      "id": "6da56ec2-f870-4195-9f10-1be92811cd4e",
+      "name": "Message a model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "S6ncytHWdZMSvu9j",
+          "name": "Ollama account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02e83f5a-9459-4813-a42e-6020848a3df8",
+              "name": "reply",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        368
+      ],
+      "id": "1df49bc5-d649-4d4c-b463-d594cf411684",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { reply: $json.content } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -112,
+        -16
+      ],
+      "id": "74da40db-230f-4564-a816-469d1c9ba5c9",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "920f5005-54d8-4ffb-993a-7e29064043ae",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "984e18d6b3d66484fa7ba1d56509270c1da20a8e1a6fd207de390514f814f1ba"
+  },
+  "id": "NnMYALN1xvoDumNf",
+  "tags": []
+}
