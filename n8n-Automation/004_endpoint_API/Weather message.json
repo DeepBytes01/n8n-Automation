@@ -1,0 +1,323 @@
+{
+  "name": "Weather message",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=16.4164&longitude=120.5931&current=temperature_2m,rain,precipitation,apparent_temperature",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -160,
+        -16
+      ],
+      "id": "e5f48a40-5bc8-48ec-8fa7-9ada40ae5d41",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e67b0343-1780-4b15-ab3c-bf4ee1e199f9",
+              "leftValue": "={{ $json.current.temperature_2m }}",
+              "rightValue": 15,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        112,
+        -144
+      ],
+      "id": "7ce41c09-c24f-499f-a6e7-4fc6ddcaf1ab",
+      "name": "is cold?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "04ad998c-d222-4629-8bed-0e1e9d00a4c4",
+              "leftValue": "={{ $json.current.rain }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        112,
+        96
+      ],
+      "id": "d533f28f-f835-459e-8bc3-c34b29122a86",
+      "name": "is raining?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        -80
+      ],
+      "id": "e229783b-a182-4d74-b09c-bfee6e45b584",
+      "name": "Bad"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        64
+      ],
+      "id": "569233e8-4a9e-4aad-9488-6861e92ac1af",
+      "name": "Good"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "Its cold and raining, keep yourself warm and stay safe!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        864,
+        -96
+      ],
+      "id": "fb2eb0a3-b279-4dcc-9218-ea7e26927248",
+      "name": "Good message",
+      "webhookId": "78c87f68-4081-4c6c-ad92-9281add3ddc7",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "E2lDozMpI2f5YsoM",
+          "name": "Discord Webhook account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "Its a good weather were having today!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        848,
+        80
+      ],
+      "id": "789b1ee5-e95d-437c-b006-81b28200710c",
+      "name": "Bad message",
+      "webhookId": "78c87f68-4081-4c6c-ad92-9281add3ddc7",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "2KUyOKZCoiiReOk3",
+          "name": "Discord Webhook account 4"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        624,
+        64
+      ],
+      "id": "e4567994-8d92-4866-84b2-37ac11a65ffc",
+      "name": "Limit"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -96
+      ],
+      "id": "a942aa27-d4fe-4e71-ae46-8c9fd2399d99",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "3b3625d4-eaa9-439e-bfb1-aae5b73b1727",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "is cold?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "is raining?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is cold?": {
+      "main": [
+        [
+          {
+            "node": "Bad",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Good",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is raining?": {
+      "main": [
+        [
+          {
+            "node": "Bad",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Good",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Bad": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Good": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bad message": {
+      "main": [
+        []
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Bad message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Good message": {
+      "main": [
+        []
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "Good message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "cfb58aee-1357-4ddc-9e3b-dcdae6e85036",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "984e18d6b3d66484fa7ba1d56509270c1da20a8e1a6fd207de390514f814f1ba"
+  },
+  "id": "PaDm6XqRPKewHtCi",
+  "tags": []
+}
