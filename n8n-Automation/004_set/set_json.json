@@ -1,0 +1,174 @@
+{
+  "name": "set_json",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -32
+      ],
+      "id": "35ea15d1-21f4-472f-97de-2e0bf8cbb8ac",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f7789056-9245-4e27-88fb-7bedf84647d2",
+              "name": "name",
+              "value": "edie mall",
+              "type": "string"
+            },
+            {
+              "id": "d8a7e377-d4bf-4df7-b733-c89cd01a2332",
+              "name": "age",
+              "value": 25,
+              "type": "number"
+            },
+            {
+              "id": "c24a76ba-61e2-44ea-94b6-5152dbf020dd",
+              "name": "isStudent",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "ae93ab82-80db-46d6-b728-8d31811fb7d2",
+              "name": "hobbies",
+              "value": "[\"ai\", \"martial arts\", \"programming\", \"automation\"]",
+              "type": "array"
+            },
+            {
+              "id": "952b3933-63ff-43e8-b5ed-56809ea96749",
+              "name": "information",
+              "value": "{\n   \"business\" : \"automation\",\n   \"id\" : 10908,\n   \"permitted\" : true\n}",
+              "type": "object"
+            },
+            {
+              "id": "84fa8126-8ef0-451b-8d02-bbb240915132",
+              "name": "summary",
+              "value": " {       \"name\":  \"edison\",       \"age\":  25,       \"isStudent\":  true,       \"hobbies\":  [          \"ai\",          \"martial arts\",          \"programming\",          \"automation\"       ],       \"information\":  {          \"business\":  \"automation\",          \"id\":  10908,          \"permitted\":  true       }    }",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -192,
+        -32
+      ],
+      "id": "8709025d-0b01-47e3-8837-18d9807b077c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ba5ec8a6-e1ec-46bf-b707-951c03facbee",
+              "name": "first name",
+              "value": "={{$json['name'].split(' ').first()}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -32
+      ],
+      "id": "92545467-8583-4b15-9829-935a780c07e1",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6f771071-1029-44ee-9245-23e486e07cce",
+              "leftValue": "={{ $json['first name'] }}",
+              "rightValue": "edie",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        272,
+        -32
+      ],
+      "id": "7499f1f4-4b09-4eb6-88a5-6267f7e691f6",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f3cfe4f5-45ba-41ea-b132-16dc0ca9d74d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "984e18d6b3d66484fa7ba1d56509270c1da20a8e1a6fd207de390514f814f1ba"
+  },
+  "id": "SuvGLbJC0DcJD13X",
+  "tags": []
+}
